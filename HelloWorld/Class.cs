@@ -16,4 +16,20 @@ namespace HelloWorld
 		public string MyStringProperty { get; set; }
 		public int MyIntegerProperty { get; set; }
   }
+
+	abstract class Person
+	{
+		public string Name { get; set; }
+	}
+
+	class Student : Person
+	{
+		public string Grade { get; set; }
+
+		public Student(string grade)
+		{
+			Grade = grade;
+
+		}
+	}
 }

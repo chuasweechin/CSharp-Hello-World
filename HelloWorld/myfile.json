@@ -26,23 +26,43 @@
 				}
 			]
 		},
-		"MyListObject": [
-			{
-				"SubDocumentProperty": "Orange",
-				"MyStringProperty": "Metal Gear 1",
-				"MyIntegerProperty": 1.0099
-			},
-			{
-				"SubDocumentProperty": "Banana",
-				"MyStringProperty": "Metal Gear 2",
-				"MyIntegerProperty": 2
-			},
-			{
-				"SubDocumentProperty": "Jackfruit",
-				"MyStringProperty": "Metal Gear Solid",
-				"MyIntegerProperty": 3
-			}
-		],
+		"MyListObject": {
+			"One": [
+				{
+					"SubDocumentProperty": "Orange",
+					"MyStringProperty": "Metal Gear 1",
+					"MyIntegerProperty": 1.0099
+				},
+				{
+					"SubDocumentProperty": "Banana",
+					"MyStringProperty": "Metal Gear 2",
+					"MyIntegerProperty": 2
+				},
+				{
+					"SubDocumentProperty": "Jackfruit",
+					"MyStringProperty": "Metal Gear Solid",
+					"MyIntegerProperty": 3
+				}
+			],
+			"Two": [
+				{
+					"SubDocumentProperty": "Orange",
+					"MyStringProperty": "Metal Gear 2",
+					"MyIntegerProperty": 1.0099
+				},
+				{
+					"SubDocumentProperty": "Banana",
+					"MyStringProperty": "Metal Gear 2",
+					"MyIntegerProperty": 2
+				},
+				{
+					"SubDocumentProperty": "Jackfruit",
+					"MyStringProperty": "Metal Gear Solid",
+					"MyIntegerProperty": 3
+				}
+			],
+			"Three": []
+		},
 		"MyListProperty": [
 			"dadlp",
 			"sds",
