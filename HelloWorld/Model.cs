@@ -17,12 +17,12 @@ namespace HelloWorld
 		public int MyIntegerProperty { get; set; }
   }
 
-	abstract class Person
+	public abstract class Person
 	{
 		public string Name { get; set; }
 	}
 
-	class Student : Person
+	public class Student : Person
 	{
 		public string Grade { get; set; }
 
