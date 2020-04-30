@@ -5,13 +5,30 @@ using System.Collections.Generic;
 
 namespace HelloWorld
 {
-  class Program
-  {
+	class Program
+	{
 		delegate int DelegateTest(int i, int z);
 
 		static void Main(string[] args)
 		{
-			RunTestForIdGeneration();
+			try
+			{
+				RunTestForExceptionCatch("");
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("What Happened?");
+			}
+		}
+
+		static void RunTestForExceptionCatch(string str)
+		{
+			string something = InnerMethod(str);
+		}
+
+		static string InnerMethod(string str)
+		{
+			return string.IsNullOrWhiteSpace(str) ? throw new ArgumentNullException(nameof(str)) : str;
 		}
 
 		static void RunTestForIdGeneration()
@@ -79,6 +96,5 @@ namespace HelloWorld
 			Console.WriteLine($"DateTimeOffsetNow: { DateTimeOffset1 }");
 			Console.WriteLine($"DateTimeOffsetUtcNow: { DateTimeOffset2 }");
 		}
-
 	}
 }
