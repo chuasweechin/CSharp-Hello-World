@@ -25,8 +25,9 @@ namespace HelloWorld
 				GroupId = "sample-event-consumer-group-2",
 				BootstrapServers = "localhost:9092",
 				AutoOffsetReset = AutoOffsetReset.Earliest,
-				EnableAutoCommit = true, 
-				EnableAutoOffsetStore = false
+				EnableAutoCommit = true,
+				EnableAutoOffsetStore = false,
+				MaxPollIntervalMs = 86400000
 			};
 
 			using (var consumer = new ConsumerBuilder<Ignore, string>(conf).Build())
@@ -52,9 +53,14 @@ namespace HelloWorld
 								$"Consumed message '{ result.Message.Value }' at: { DateTime.Now }'."
 							);
 
-							// Test 100 seconds - works
-							// Test 200 seconds - works
-							Thread.Sleep(TimeSpan.FromMilliseconds(200000));
+							// Test 100 seconds, 1 minute 40 seconds - works
+							// Test 200 seconds, 3 minutes 20 seconds - works
+							// Test 400 seconds, 6 minutes 40 seconds - Hit error: Application maximum poll interval (300000ms)
+							// exceeded by 98ms (adjust max.poll.interval.ms for long-running message processing): leaving group
+							// Resolve by setting MaxPollIntervalMs = 86400000
+							// Test 800 seconds, 13 minutes 20 seconds - works
+							// Test 3000 seconds, 50 minutes - works
+							Thread.Sleep(TimeSpan.FromMilliseconds(3000000));
 							consumer.StoreOffset(result);
 
 							Console.WriteLine($"Commit: { DateTime.Now }");
