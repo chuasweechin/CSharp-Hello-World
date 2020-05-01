@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using Confluent.Kafka;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace HelloWorld
@@ -11,24 +13,85 @@ namespace HelloWorld
 
 		static void Main(string[] args)
 		{
-			try
+			KafkaLongRunningProcessTest();
+		}
+
+		static void KafkaLongRunningProcessTest()
+		{
+			var topic = "SampleEvent";
+
+			var conf = new ConsumerConfig
 			{
-				RunTestForExceptionCatch("");
-			}
-			catch (Exception ex)
+				GroupId = "sample-event-consumer-group-2",
+				BootstrapServers = "localhost:9092",
+				AutoOffsetReset = AutoOffsetReset.Earliest,
+				EnableAutoCommit = true, 
+				EnableAutoOffsetStore = false
+			};
+
+			using (var consumer = new ConsumerBuilder<Ignore, string>(conf).Build())
 			{
-				Console.WriteLine("What Happened?");
+				consumer.Subscribe(topic);
+
+				CancellationTokenSource cts = new CancellationTokenSource();
+
+				Console.CancelKeyPress += (_, e) => {
+					e.Cancel = true; 
+					cts.Cancel();
+				};
+
+				try
+				{
+					while (true)
+					{
+						try
+						{
+							var result = consumer.Consume(cts.Token);
+
+							Console.WriteLine(
+								$"Consumed message '{ result.Message.Value }' at: { DateTime.Now }'."
+							);
+
+							// Test 100 seconds - works
+							// Test 200 seconds - works
+							Thread.Sleep(TimeSpan.FromMilliseconds(200000));
+							consumer.StoreOffset(result);
+
+							Console.WriteLine($"Commit: { DateTime.Now }");
+						}
+						catch (ConsumeException ex)
+						{
+							Console.WriteLine($"Error occured: { ex.Error.Reason }");
+						}
+						catch (TopicPartitionException ex)
+						{
+							Console.WriteLine($"Commit error: {ex.Error.Reason}");
+						}
+						catch (KafkaException ex)
+						{
+							Console.WriteLine($"Commit error: {ex.Error.Reason}");
+						}
+						catch (Exception ex)
+						{
+							Console.WriteLine($"General error: {ex.Message}");
+						}
+					}
+				}
+				catch (OperationCanceledException)
+				{
+					// Ensure the consumer leaves the group cleanly and final offsets are committed.
+					consumer.Close();
+				}
+				finally
+				{
+					consumer.Close();
+				}
 			}
 		}
 
 		static void RunTestForExceptionCatch(string str)
 		{
-			string something = InnerMethod(str);
-		}
-
-		static string InnerMethod(string str)
-		{
-			return string.IsNullOrWhiteSpace(str) ? throw new ArgumentNullException(nameof(str)) : str;
+			string something = Methods.InnerMethod(str);
 		}
 
 		static void RunTestForIdGeneration()

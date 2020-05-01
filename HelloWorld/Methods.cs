@@ -11,6 +11,13 @@ namespace HelloWorld
 {
   public class Methods
   {
+		#region RunTestForExceptionCatch()
+		public static string InnerMethod(string str)
+		{
+			return string.IsNullOrWhiteSpace(str) ? throw new ArgumentNullException(nameof(str)) : str;
+		}
+		#endregion
+
 		#region RunTestForIdGeneration()
 		public static void OldIdGenerator()
 		{
