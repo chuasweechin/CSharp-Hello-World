@@ -14,7 +14,20 @@ namespace HelloWorld
 		#region RunTestForExceptionCatch()
 		public static string InnerMethod(string str)
 		{
-			return string.IsNullOrWhiteSpace(str) ? throw new ArgumentNullException(nameof(str)) : str;
+			try
+			{
+				if (string.IsNullOrWhiteSpace(str))
+				{
+					throw new NotImplementedException("Null detected");
+				}
+
+				return str;
+			}
+
+			catch (ArgumentNullException)
+			{
+				throw;
+			}
 		}
 		#endregion
 
