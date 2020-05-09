@@ -25,11 +25,12 @@ namespace HelloWorld
 	public class Student : Person
 	{
 		public string Grade { get; set; }
+		public Diet Diet;
 
 		public Student(string grade)
 		{
 			Grade = grade;
-
+			Diet = Diet.VEGE;
 		}
 	}
 }

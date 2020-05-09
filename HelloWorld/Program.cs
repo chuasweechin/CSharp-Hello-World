@@ -11,24 +11,16 @@ namespace HelloWorld
 
 		static void Main(string[] args)
 		{
-			try
+			RunEnumTest();
+		}
+
+		static void RunEnumTest()
+		{
+			Student student = new Student("B");
+
+			if (student.Diet == Diet.VEGE)
 			{
-				RunTestForExceptionCatch("");
-			}
-			catch (NotImplementedException ex)
-			{
-				Console.WriteLine("NotImplementedException");
-				Console.WriteLine(ex.Message);
-			}
-			catch (ArgumentNullException ex)
-			{
-				Console.WriteLine("ArgumentNullException");
-				Console.WriteLine(ex.Message);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Exception");
-				Console.WriteLine(ex.Message);
+				Console.WriteLine("Works!");
 			}
 		}
 
