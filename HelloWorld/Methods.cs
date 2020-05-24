@@ -6,11 +6,31 @@ using System.Reflection;
 using System.Collections;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace HelloWorld
 {
   public class Methods
   {
+
+		public async static void BackgroundThread(CancellationToken ct)
+		{
+			await Task.Run(() =>
+			{
+				while (true)
+				{
+					if (ct.IsCancellationRequested)
+					{
+						Console.WriteLine("Background was cancelled....");
+						break;
+					}
+
+					Console.WriteLine("Background Thread running.....");
+				}
+			});
+		}
+
 		#region RunTestForExceptionCatch()
 		public static string InnerMethod(string str)
 		{

@@ -1,5 +1,8 @@
+using System;
+
 namespace HelloWorld
 {
+	[Serializable]
 	public class Diet : Enumeration
 	{
 		public static Diet FRUI = new Diet(1, "FRUI", "Fruit");

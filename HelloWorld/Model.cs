@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace HelloWorld
 {
@@ -17,12 +20,14 @@ namespace HelloWorld
 		public int MyIntegerProperty { get; set; }
   }
 
+	[Serializable]
 	public abstract class Person
 	{
 		public string Name { get; set; }
 	}
 
-	public class Student : Person
+	[Serializable]
+	public class Student : Person, ICloneable
 	{
 		public string Grade { get; set; }
 		public Diet Diet;
@@ -31,6 +36,22 @@ namespace HelloWorld
 		{
 			Grade = grade;
 			Diet = Diet.VEGE;
+		}
+
+		public object Clone()
+		{
+			using (MemoryStream stream = new MemoryStream())
+			{
+				if (GetType().IsSerializable)
+				{
+					BinaryFormatter formatter = new BinaryFormatter();
+					formatter.Serialize(stream, this);
+					stream.Position = 0;
+
+					return formatter.Deserialize(stream);
+				}
+				return null;
+			}
 		}
 	}
 }

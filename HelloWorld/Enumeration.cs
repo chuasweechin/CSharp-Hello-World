@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace HelloWorld
 {
+  [Serializable]
   public abstract class Enumeration : IComparable
   {
     public string Name { get; private set; }

@@ -2,6 +2,9 @@
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace HelloWorld
 {
@@ -11,10 +14,101 @@ namespace HelloWorld
 
 		static void Main(string[] args)
 		{
-			RunEnumTest();
+			int i = 0;
+
+			Console.WriteLine("Main Thread start running.....");
+			while (true)
+			{
+				i++;
+
+				if (i == 100)
+					AsyncTest();
+
+				if (i == 100000000)
+					break;
+			}
+			Console.WriteLine("Main Thread end.....");
 		}
 
-		static void RunEnumTest()
+		static void AsyncTest()
+		{
+			int ii = 0;
+			var tokenSource = new CancellationTokenSource();
+			var token = tokenSource.Token;
+
+			var _ignored = Task.Run(() =>
+			{
+				Methods.BackgroundThread(token);
+			}, token);
+
+			while (true)
+			{
+				ii++;
+
+				Console.WriteLine($"{ii}: Method Thread running....");
+
+				if (ii == 100)
+				{
+					tokenSource.Cancel();
+					Console.WriteLine("Method Thread cancel background task.....");
+					tokenSource.Dispose();
+					break;
+				}
+			}
+		}
+
+		static void RegexTest()
+		{
+			string amount = "1.0";
+			var rx = new Regex(@"^[0-9]+(\.[0-9]{1,2})?$", RegexOptions.Compiled);
+			bool result = rx.IsMatch(amount);
+
+			Console.WriteLine(amount.ToString());
+			Console.WriteLine(result.ToString());
+		}
+
+		static void RunTestForToString()
+		{
+			decimal amount = 100.1200m;
+			DateTimeOffset dt = DateTimeOffset.UtcNow;
+			DateTimeOffset dt2 = DateTimeOffset.Now;
+
+			DateTimeOffset dt3 = DateTimeOffset.Parse("21/05/2020 05:43:43".ToString());
+			Console.WriteLine(amount.ToString());
+			Console.WriteLine(dt.ToString());
+			Console.WriteLine(dt2.ToString());
+
+			Console.WriteLine(dt3.ToString());
+		}
+
+		static void RunTestForAmount()
+		{
+			ulong cents = 100 / 3;
+			string dollar = string.Format("{0:0.00}", (decimal)cents / 100);
+			Console.WriteLine(dollar);
+		}
+
+		static void RunTestForObjectReference()
+		{
+			List<Student> students = new List<Student>();
+			students.Add(new Student("A"));
+			Student clone = null;
+
+			foreach (var student in students)
+			{
+				clone = student.Clone() as Student;
+				clone.Grade = "clone";
+			}
+
+			students.Add(clone);
+
+			foreach (var student in students)
+			{
+				Console.WriteLine(student.Grade);
+			}
+		}
+
+		static void RunTestForEnum()
 		{
 			Student student = new Student("B");
 
