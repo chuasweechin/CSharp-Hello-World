@@ -20,6 +20,12 @@ namespace HelloWorld
 		public int MyIntegerProperty { get; set; }
   }
 
+	class Order
+	{
+		public string Customer { get; set; }
+		public decimal Amount { get; set; }
+	}
+
 	[Serializable]
 	public abstract class Person
 	{

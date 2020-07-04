@@ -5,29 +5,49 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Linq;
+using System.Globalization;
 
 namespace HelloWorld
 {
+
 	class Program
 	{
 		delegate int DelegateTest(int i, int z);
 
 		static void Main(string[] args)
 		{
-			int i = 0;
+			Console.WriteLine("Test");
+		}
 
-			Console.WriteLine("Main Thread start running.....");
-			while (true)
+		static bool IsOnlyZeroTest(string value)
+		{
+			return string.IsNullOrWhiteSpace(value.Trim('0'));
+		}
+
+		static void IsValidDateTest()
+		{
+			string date = "20201212";
+			string format = "yyyyMMdd";
+
+			if (DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDateValue))
+				Console.WriteLine("Ok");
+		}
+
+		static void ListFilterTest()
+		{
+			List<Student> list = new List<Student>
 			{
-				i++;
+				new Student("A"),
+				new Student("A"),
+				new Student("B"),
+				new Student("B")
+			};
 
-				if (i == 100)
-					AsyncTest();
+			list.RemoveAll(s => s.Grade == "A");
+			var filter = list.Where(s => s.Grade == "C").FirstOrDefault();
 
-				if (i == 100000000)
-					break;
-			}
-			Console.WriteLine("Main Thread end.....");
+			Console.WriteLine(filter);
 		}
 
 		static void AsyncTest()
