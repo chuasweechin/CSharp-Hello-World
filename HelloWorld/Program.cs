@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Linq;
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HelloWorld
 {
@@ -17,7 +19,75 @@ namespace HelloWorld
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Test");
+			ContinueBehavior();
+		}
+
+		static void ReturnBehavior()
+		{
+			List<string> list = new List<string>() { "apple", "orange", "pear" };
+
+			foreach (var item in list)
+			{
+				if (item == "orange")
+					return;
+
+				Console.WriteLine(item);
+			}
+		}
+
+		static void ContinueBehavior()
+		{
+			List<string> list = new List<string>() { "apple", "orange", "pear" };
+
+			foreach (var item in list)
+			{
+				if (item == "orange")
+					continue;
+
+				Console.WriteLine(item);
+			}
+		}
+
+		static void Hash()
+		{
+			var salt = Encoding.ASCII.GetBytes("salt and pepper");
+			var SALT_SIZE = salt.Length;
+
+			var pbkdf2 = new Rfc2898DeriveBytes("apple", salt, 100000);
+
+			StringBuilder sb = new StringBuilder();
+
+			foreach (var b in pbkdf2.GetBytes(SALT_SIZE))
+			{
+				sb.Append(b.ToString("x2"));
+			}
+
+			Console.WriteLine(sb);
+		}
+
+		static void Binary(int n)
+		{
+			//n = -n;
+
+			// step 1 
+			if (n != 0)
+				Binary(n / -2);
+
+			// step 2 
+			Console.Write(n % 2);
+		}
+
+		public static List<int> GetBitsFromDecmial(int number)
+		{
+			List<int> result = new List<int>();
+
+			while (number != 0)
+			{
+				result.Add(number % 2);
+				number /= -2;
+			}
+
+			return result;
 		}
 
 		static bool IsOnlyZeroTest(string value)
@@ -31,7 +101,11 @@ namespace HelloWorld
 			string format = "yyyyMMdd";
 
 			if (DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fromDateValue))
-				Console.WriteLine("Ok");
+				Console.WriteLine(fromDateValue);
+
+			var offset = DateTimeOffset.ParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+
+			Console.WriteLine(offset);
 		}
 
 		static void ListFilterTest()
